@@ -19,18 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-NOTA SOBRE EL ALCANCE
-
-Esta licencia MIT cubre el codigo del tablero: el JavaScript y el CSS incluidos
-en index.html que implementan los filtros, los graficos y la interfaz.
-
-Los datos y los resumenes (la seleccion diaria de noticias, los resumenes
-redactados y la clasificacion) se publican bajo Creative Commons Atribucion 4.0
-Internacional (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/deed.es
-
-Ninguna de las dos licencias se extiende a los titulares, textos ni contenidos
-originales de los medios enlazados, que pertenecen a sus respectivos autores y
-editores.

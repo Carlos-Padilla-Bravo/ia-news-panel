@@ -79,3 +79,6 @@ Un límite que conviene aclarar: esas licencias cubren lo que es propio de este 
 **No se extienden a los titulares, textos ni contenidos originales de los medios
 enlazados**, que pertenecen a sus respectivos autores y editores. Las URL de origen están
 en cada ficha justamente para que el crédito quede donde corresponde.
+
+El detalle completo, con la forma de citar, está en
+[LICENSE-DATOS.md](LICENSE-DATOS.md).
