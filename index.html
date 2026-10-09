@@ -11,7 +11,7 @@
   --base:#FFFFFF; --alt:#F4F6F8; --realce:#D6EDF7;
   --texto:#12171C; --texto2:#5A6673; --gris:#828D96;
   --primario:#0D6E96; --primario-txt:#08506F; --celeste:#4FB3DE;
-  --senal:#E4600B; --senal-txt:#B24905;
+  --senal:#E4600B; --senal-txt:#B24905; --senal-barra:#FFC08A;
   --borde:#DCE2E7; --grafito:#2C3742;
   --favorable:#5C9E27; --adverso:#AA1421;
   --s1:#0D6E96; --s2:#4FB3DE; --s3:#2C3742; --s4:#828D96;
@@ -25,7 +25,7 @@
     --base:#12171C; --alt:#1C242C; --realce:#2C3742;
     --texto:#EDF1F4; --texto2:#A8B4BE; --gris:#828D96;
     --primario:#4FB3DE; --primario-txt:#4FB3DE; --celeste:#4FB3DE;
-    --senal:#F5822F; --senal-txt:#F5822F;
+    --senal:#F5822F; --senal-txt:#F5822F; --senal-barra:#8A3600;
     --borde:#39424B; --grafito:#D6EDF7;
     --favorable:#9BD65B; --adverso:#E4626A;
     --s1:#4FB3DE; --s2:#D6EDF7; --s3:#A8B4BE; --s4:#5A6673;
@@ -35,7 +35,7 @@
   --base:#12171C; --alt:#1C242C; --realce:#2C3742;
   --texto:#EDF1F4; --texto2:#A8B4BE; --gris:#828D96;
   --primario:#4FB3DE; --primario-txt:#4FB3DE; --celeste:#4FB3DE;
-  --senal:#F5822F; --senal-txt:#F5822F;
+  --senal:#F5822F; --senal-txt:#F5822F; --senal-barra:#8A3600;
   --borde:#39424B; --grafito:#D6EDF7;
   --favorable:#9BD65B; --adverso:#E4626A;
   --s1:#4FB3DE; --s2:#D6EDF7; --s3:#A8B4BE; --s4:#5A6673;
@@ -68,12 +68,20 @@ details.criterios .cuerpo p{margin:0 0 7px;}
 details.criterios .cuerpo ul{margin:0 0 7px;padding-left:17px;}
 details.criterios .cuerpo li{margin-bottom:3px;}
 details.criterios .cuerpo b{color:var(--texto);}
-details.criterios .cuerpo p.nota-cambio{border-top:1px solid var(--borde);padding-top:7px;
-  margin-top:9px;color:var(--texto3,var(--texto2));}
-.firma{display:flex;flex-direction:column;line-height:1.15;}
-.firma .n{font-family:var(--sans);font-weight:600;font-size:16px;}
-.firma .a{font-family:var(--sans);font-weight:400;font-size:16px;color:var(--texto2);}
+/* La firma es un enlace al perfil de LinkedIn: foto y nombre reaccionan juntos. */
+a.firma{display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none;}
+a.firma:hover{text-decoration:none;}
+.firma .foto{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:none;
+  box-shadow:0 0 0 2px var(--borde);transition:transform .18s ease,box-shadow .18s ease;}
+.firma .txt{display:flex;flex-direction:column;line-height:1.15;}
+.firma .n{font-family:var(--sans);font-weight:600;font-size:16px;transition:color .18s ease;}
+.firma .a{font-family:var(--sans);font-weight:400;font-size:16px;color:var(--texto2);
+  transition:color .18s ease;}
 .firma .b{width:38px;height:3px;background:var(--senal);margin-top:6px;}
+a.firma:hover .n,a.firma:hover .a,a.firma:focus-visible .n,a.firma:focus-visible .a{
+  color:var(--primario);}
+a.firma:hover .foto,a.firma:focus-visible .foto{box-shadow:0 0 0 2px var(--primario);
+  transform:scale(1.08);}
 
 .envoltura{max-width:1560px;margin:0 auto;padding:0 24px 56px;}
 .periodo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
@@ -154,11 +162,20 @@ h3{font-family:var(--cond);font-weight:700;font-size:11px;letter-spacing:.6px;
               transition:background .12s, opacity .12s;}
 .rank li.clic:hover{background:color-mix(in srgb, var(--primario) 9%, transparent);}
 .rank li.apagado{opacity:.4;}
-.rank li.cima .v{color:var(--senal-txt);font-weight:600;}
+.rank li.cima .v,.rank li.cima .p{color:var(--senal-txt);font-weight:600;}
 svg text.val.cima{fill:var(--senal);font-weight:600;}
+/* La cifra va dentro de la barra, contra su extremo derecho: toma el color del fondo de
+   la página para leerse sobre la barra en los dos temas. La mayor conserva el naranja,
+   en un tono que contrasta con la barra. */
+svg text.val.dentro{fill:var(--base);font-weight:600;}
+svg text.val.dentro.cima{fill:var(--senal-barra);}
 .rank li.otros{color:var(--gris);font-style:italic;}
-.rank li.otros .v{color:var(--gris);}
+.rank li.otros .v,.rank li.otros .p{color:var(--gris);}
 .rank .v{font-family:var(--mono);font-size:13px;color:var(--texto2);}
+/* El nombre ocupa el espacio libre y las dos cifras quedan en columnas a la derecha. */
+.rank li>span:first-child{flex:1;min-width:0;}
+.rank .p{font-family:var(--mono);font-size:13px;color:var(--texto2);width:44px;
+  text-align:right;flex:none;}
 .vacio{font-family:var(--cond);font-size:13px;color:var(--gris);padding:8px 0;}
 
 .graficos{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:14px;margin-bottom:18px;}
@@ -330,39 +347,51 @@ aside.lateral .chips.dirs button.chip[data-v="Retroceso"][aria-pressed="true"]{
     <div class="fila-top">
       <div>
         <h1>Selección de noticias de inteligencia artificial</h1>
-        <p class="sub">493 noticias en 100 reportes diarios · actualizado el 8 de octubre de 2026, 23:23</p>
+        <p class="sub">493 noticias en 100 reportes diarios · actualizado el 9 de octubre de 2026, 12:00</p>
         <details class="criterios">
           <summary>Cómo se eligen las cinco noticias de cada día</summary>
           <div class="cuerpo">
-            <p>Se publican muchas más de cinco noticias de IA al día, así que este tablero es una
-            selección y no un censo. Quien la arma es un agente que trabaja con una pauta fija, y
-            estas son sus reglas.</p>
+            <p>Se publican muchas más de cinco noticias de inteligencia artificial al día, así
+            que este tablero es una selección y no un censo. Quien la arma es un agente de
+            inteligencia artificial que trabaja con una pauta fija, y estas son sus reglas.</p>
             <ul>
               <li><b>La fecha manda.</b> Las cinco tienen que haberse publicado el día del reporte.
               Cada una se abre en su fuente para confirmar ahí la fecha, porque los boletines
               recopilatorios fechan mal con frecuencia. La que no se puede verificar se descarta.</li>
               <li><b>El tema es libre.</b> Entran lanzamientos, financiamiento, compras, litigios,
-              regulación, incidentes de seguridad, investigación, infraestructura, efectos en el
-              empleo y análisis de medios serios. La preferencia es que dos de las cinco sean
-              lanzamientos de producto o modelo, pero es una preferencia y no un requisito.</li>
+              regulación, posturas públicas, incidentes de seguridad, investigación, infraestructura,
+              efectos en el empleo y análisis de medios serios.</li>
+              <li><b>Dos lanzamientos por día, cuando los hay.</b> La pauta busca que dos de las
+              cinco noticias sean lanzamientos: un modelo, una función, un chip o un robot que ya se
+              puede usar, no una hoja de ruta. Es lo deseable y no una regla fija. Si el día trae
+              menos, se completa con otros temas. Si trae más, se eligen los dos más importantes,
+              salvo que falten noticias relevantes de otro tipo.</li>
               <li><b>Una historia, una vez.</b> Lo ya reportado en los catorce días previos no
               vuelve a entrar, salvo que traiga un hecho nuevo: un trato que se cerró, una cifra que
               cambió, un fallo judicial. En ese caso el resumen parte diciendo qué cambió.</li>
-              <li><b>Un dominio, una noticia.</b> Dentro de un mismo día no se repite el medio, y se
+              <li><b>Un dominio, una noticia.</b> Desde septiembre de 2026 cada medio aporta una sola
+              noticia al día. Hasta agosto de 2026 un mismo medio podía repetirse. La selección se
               reparte entre comunicados oficiales, prensa especializada, prensa de negocios y prensa
-              internacional. Los blogs de quien anuncia van primero.</li>
+              internacional.</li>
+              <li><b>Primero la fuente directa.</b> Antes de cerrar el día se revisan los blogs y las
+              salas de prensa de quienes fabrican los modelos, porque la prensa suele recoger un
+              anuncio recién al día siguiente.</li>
               <li><b>Días flacos.</b> Cuando un día no da cinco noticias verificables, el reporte
               queda con las que haya. No se rellena. Los fines de semana y feriados rinden menos.</li>
             </ul>
             <p>Lo que la pauta <b>no</b> hace es medir relevancia o impacto con una fórmula. Ahí hay
             un juicio editorial, y con él un sesgo posible: lo que no se pudo verificar a tiempo o
             vive tras un muro de pago queda fuera aunque importe. La clasificación de cada noticia
-            (tema, dirección, actor, país y estado) también la aplica el reporte y no viene de la
-            fuente.</p>
+            (tema, tipo de hecho, dirección, actor, país y estado) también la aplica el reporte y no
+            viene de la fuente.</p>
           </div>
         </details>
       </div>
-      <div class="firma"><span class="n">Carlos</span><span class="a">Padilla Bravo</span><span class="b"></span></div>
+      <a class="firma" href="https://www.linkedin.com/in/carlospadillabravo" target="_blank" rel="noopener"
+         title="Perfil de Carlos Padilla Bravo en LinkedIn">
+        <img class="foto" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCACQAJADASIAAhEBAxEB/8QAHAAAAAcBAQAAAAAAAAAAAAAAAgMEBQYHCAEA/8QAPRAAAQMDAgMFBgMHAgcAAAAAAQIDBAAFEQYhEjFBBxNRYXEUIjKBkaEjQlIIFTOCscHRYvAlQ1RykrLx/8QAGgEAAgMBAQAAAAAAAAAAAAAAAQIAAwUEBv/EACURAAMAAgICAQQDAQAAAAAAAAABAgMRBCESMQUTIjJBYXGhwf/aAAwDAQACEQMRAD8At4IrvDijAjehcOK4S8K4a7w0YE10J8agQsDFAWRvijXBgUkcUQcZxQZEgK1DFELVk7V55zGaSrdx1xS7HSD+PGK6l3x2pqk3aNFwHnkIJIA4jjnQ25qVjiScpO2elTYdDulwE70pbcHKmhuQFYwaWx3gceNFAaHDAVvXCigoVijwMimEE5TmgFNKSii1pydqmiCZaPCgFORvSpSaL4ee1QgsxihAUICugVAbOYHhXRihKT7tFlO1QiCniM0jfUBSh1BqA9qmumdBaccnbOTXj3MRo7hThGckfpA3PyHWl7b0OuuxF2j9qVq0CwhDyTLnvAlqI2oBWP1KJ+FPn1rPmpe2LVupC4j28wIyj/Bh5Rt4FXxH7UwzImodRzn7jJjy5kl9RccdUnmf7Dyohemr03w8drmDj2T+Gd6vj6a9tbEpZH+noRvzZUlZcfkvurPNS3FKJ+ZNOFq1bf7G4HLdeZ8Yg5wh4lJ9UnY/SnO39meqJ5z+7VR0c+J9QSD6dTS1XZhOaYQt59CHApIWjHIHng+VLk5nHjqqQ2PiZr/GWSfSv7Q12gKSzqCG3cGs7vsANuj1Hwq+1X7pjUlt1Jb27hapjcqO5txIO6T1SocwfI1kW46QkQuPDgXg7Y60PRWt7roK8CZBVltRCZMZfwPJB5HwI6HpUl48q8sbDcZMT1kRtxlfEBSts1FtJajhaos8W7W54uRpCeIZ+JJ6pUOhB2NSRvO1IBikpotaKMAOKCoGjsASpGBQSk5o8pymgFNADYpA8q6lNeA2zQ0CiAFw5FAWnCaPA2oDidvCo0RCF5OAdqzH2r3RWp+1VUAr7yFZGwhDeNu9IBV674/8a1A7gEA771kLT6lTL9drkoAuSbg6onOduM/5rm5WT6eKqXs6+Jj+plSZO9OQVN4ykHI3yKnVviFQGEJOBy4elMlpUy2E+5nYVLobjmcNtlKQMb15/Etnoci0uhBc4RU2QkcIA54qJ3XT7i2iW9s8+tTyah5Mcq4uNZ6p2xUeuC5Pc8XAQR4DnUzQgY6Kvv1q4G1fh4ONs9arDUEEtLDoSB0PpV53vMyMtC2+FY8qrDVNs4YjoxxDmCOYrs+M5Hhalso52FXjaJr+zJqrubhcNMvr919PtcfPRScBY+Ywf5TWlGMECsX9ikkxu0+xK4gkLdW0c9eJtQxWzIqvdFegyrVHm4fQ4NpymgqTRjBymuqTSaGCeH3aAU0o4Rw0URvRFDBQ0jegpGaMQKBAwDAoLifdozpXCPdNO0AbnWyv3eXEcVk/SsD2Bl1DxCVJkPA9McLigc/Q1rZ4Y9ayn2iW1243efbrTJbUxJujwLjBynu1K48bc91bjyrg50K4UN6TZ38CnNOkt6RYujLxp6e2hbc2M4OXEVjJP+xViW1MKW2e5ebUofpNZLuWlbFZ2XXCu6z3IriGJDjLjbLTLys4BWoeR5Dbqak/Z85K0tFbvUa4BSJJWlUNUjvFgJUUnIAxnbIVyI5GuauLGKPOXtf0dk8m8l+FLs0mqDG7vvHngGgApRVsBUI1f2kaMsTLrDt1irkpJHdsqC1fblRupLuw5o/iU6tRLeeEnck8v61T8/QsaEq4S2bV7VLZbDrTL8dxftLnEMpBChwjGd+vSlxPFdeND5FllbkRze1mHc7mptTDrMXPuu/mH/ckf2ouRKZuLHEh1DrY2CgPiTTxGk/vKL7DddJMwIynixxx2locQnGzikKyQnp8WfWkqtGq0+66GChyGVEg5zgYpORjww9x0/72Nx6ytff2v60QzQTS4XahYm2tyLk0B6FX+DW1YidhWQtEw5Ce01E2Iy0s278cB3IQFY4U5xudznHlzrV+lZsqfbwuchpMlCuFRaBCFDGQQDyrXWeaczvvRk3x6lVevt3okDKdqGoV5oUNQq3RzNhZG1EqG9KSKJUN6OgHRzoxG9FijUUqIG9K7jKa50oXSrGAQyUBxC2z+ZJT9RVCSLIzCvkllkJQtKgeA/8ALXgDH2z860A8nnVbaytjLWqIsgYSqQjK8dSnr96zfkMTceS/RqfGZUrcP9/8IlbNEwY5Un2Jt5S3O9cU4Mha85yfHenHVFoEKCpbAS264ng4QAEozzIHpyqbW9lnu1KSkEkY8gaZ9cwQxaUuODvH3VBtlA8T+asxpqGbCe6SK/ukNaNPxO9SrulKHPonGAKlGhksgETPx8AAKUPeGOW9KLzYn3tLLabQVqbb+IjYEUl7O5bcmEqFc4oQ6yAUyE9Uk43+dVY4cWmPlScskN5tbT/4zKklGPe6kfWoZqWA3GtrzXdjCBlJGxHiKsd+BIt0VXduBxpQyjqMVA9UvJmw3R/DVvVuad9v2VR/hDeyuzoXer1cgsBLzKmE4GcKCSr74q9dIBTlrQ+rP4oTgeiQP65rP/ZpPIuDzBdc4jJcaSwMhKyoYB8zuB/8rSlohCBAjxRg90gJJHU9T9c1o8TG3ldP9JL/AAzeZkSwKV+2ObIwN6GravIG1dVWpoyABG1FKFHHlRaqjIAFGoooUYikRBR0r3SuA7UKrCJCdwbmq67Q1ey3O1PKwlLi3GgojkcBWM/I1ZLqc1XHbZFUrRMic0tSHrc6iW2UjfKTgj6KNUciPOHJfxsnhkVCuyzmWGiXASlKeInp/v8AzVe9oHalClx+KHiS2hwob4NipeDgj/T086TxtSvXGyGJwJU7KaUj3RxcY2zkDxzVXp05dpMouraCoaHfZzHdPCcp2J23znYVkQpa+99I2ruvNLH7ZMo/abfLjZXLdKeUqQhnj4GVhJcQCME+BO+RnpUas3aZdLVNV3rylJA+IJ4ioHcAjb3cH15elWDZbCWoLSWdOQXVtJ/DcWQcKPj4j1qL6xski4u4mJjR1qPAe7SN04A+IgZ2wNhVn1cS/JdBvjZvfmWLoDtR/fjTlnmNd2rBeiOZyHmuuPQ/bHnSHV8tqN7TlSUEoKk5Gw/zUN0np5Onr5HDKVKbQwqTHW64SGyRhQI5426eIpBrmXLmuHJIQxxOr415I22Hr5CkqZyNKfRXOSol+XsmvYhp1FyKrxKUkCK+kstIQPiAO5VzOCTzHh4VfMcggVUnYjHahaTadaSlPtCivIPxAbZ+1WnHf3Fa+OVK6MbNbp9joNhQSa4lQKdq4TVxUD6UUs0PO1AXvS0QLBo1NEJVmjUnFKQPB2oYO1FA7ChcQHWrCAlDIpi1Iw1Mt78Z9PE06gtrH+kjB/rTs9KQ2k5UKYLtKDrDgBG4pa9BkzXpiDebXqxyyx23GpKXSwCDzTvwrwTy3B+vhViXPTSFs+yy3nELxhT6eQPryzk5r1xYjyb0m5t5ZmQwkqdQQAtAVslWQevL1xUpMZGorUpKHg2O7LQAwVA42GDWRycPn+JscfN49sgLFku0VKG2tQzX0ZA+PgSfIncnny8qAjTluZdWqXOkTJrgICn1Yxk8h051NXW2bahKgwW0pBxxJ4sEDkAPHFGmAJLTUhbHEr3VknGfHHyz9a53hulou+rCeyE323CHaxObATIjLClcbfxNZGcb42OD57VXcqXHkOW6MypCn3HFOLPGClKVDKwo/qH26VYfaZd27fEXbWpigt7OEtpzxJzjGeQzt9qrC22SQ2lby0tIQpsgcKN+HHxeRxufWumFOGd0/RzU6y1qS9Oz+/RJtpaTFXxJZKm88s4URmp/GlA9azh2Zy5entI3y/KacdYTLUWGiccSEDLnCfmPmKtnTOsYV9t7E+C+HY7wyDyIPVJHQjqK1XPikZje20WOxMwNztSlMhK+RqLM3NKgMKFLGp3Lf71FQjRIknbnQVGmxuceEYNGe255nai2RIUJVRqVDFIVSUoFEOT8DFJsI7mQhKdzSORckpScECmh+4hO5XgUx3O+oaSo8XKo70FSPcu6pGcqApguN7bSCMg1DNQ69hWplT0uWhpHTJ3PkBzNU3rHtVuF7UuLa1uQ4h2U5ydc+f5R6b0JVX6C9T7LduN7jp0xc7uysFhu6pjOrHJRQhJ4R5cS/qKe2GJkRoyIEh3gXhZAUTjrtv12qII02ofswNIAPfOFVx25n8Ti/wDVNSLspvAv+koilqJdaR3Tm/UbZri+Rhw5qX/Bp/H2qmoocnbvc1tsJU0HlJGV7cJJzsPTrRAlXV1DSktOtgnKmjuAN9s/T71LokFlQwpOVAYHShTkw4DPE+ohI3xnGa5FmyNdl7wY0+itZWlpV3dC7jwOlKyUIbSABk7Anr02pFeLC4p6LYYKgbjcFBsKA2Zb/Ms+QG/ntUwl6vt7bTyklKUNjYDAFLtJWRyO2/qK4NqTNnowyhYwpljmB5FXP6UeJxnycyT7S9g5WZcfE2l2/RE9ZxYNk007Z4TfdQ4kJ1lsHqOA+8fEkkknxNUDo3Wk/R84Ox1F2K4R38Yn3VjxHgrz+tXN2ySlR7LMKVEKUhSPrtWea9Pklejzs0/ZqHS+vLZqGOHoMkLIHvtHZbfkpP8AflUrjXhKsAK+9Y3jSn4byXozzjDqeS21FKh8xU3sHa9erYtCLgEz2BsSfddHz5H5iuSsTX4lytP2akauydhn70qTcUqA3qnLB2p2K7lKUzhGeOB3Un8M+gPI/WpnHuwUAQvI6EHnVL2vZbrfomj0nh3JptmXQNg5V96hPaB2q2vRgSw6lcuc4niRGbIBA/Uo/lH3NUpqjti1DqDLcZYtccjBRHVlavVZ3+mKZY6r0L5KfZd2pe0G2WRsmbPaZPRBVlR9Ejc1Tuqu1+ZclLZtKFMN8u+dHvH0TyHzquluLdWXHFqWtW5Uo5J9TXKtnjyu32JWVv10Gypcic8XpT7jzh5qWrJok8j6V2uoQpxQQgZUo8IHiTtV5UbVTbI6eyy22PjbS4/bm2WGyd1kMZOPQZJqoexh2RaGO5eQpILimnEn8qgcEVaySLlqCO2lfEzbIa4bYByO8DWFn6jh/lpgVpp6G7LvERpSmHXu9kNpG7asbrHiDzI6bmuX5Tj04Xiv5O3gZ5VPZPWmkqHEBzHOgQrBEu01964N+0MsEJSwrJSpRGcqHUDwrlluDT0BClEEAc6c7IpDrcpaT7incZ+QrP4GGbzSqW0dvMy1OFuXphUjSunHW8O2O3cv+nG3yrjltlGI4pSieJRUgK5g+Hof608sgrUMklKfHrQZbgWO7PLrXpZmZ6laPPVVV3T2Zm7c5OLLwnZS3ko++f7VRlXj+0qgxXbcjGPaXFu7ciUjB/qD86o6qcv5Fkej1er1eqoc9TtZtWXrT5/4fcHmkdWlHibP8p2pozXKDSfsKbXo/9k=" alt="Foto de Carlos Padilla Bravo" width="44" height="44">
+        <span class="txt"><span class="n">Carlos</span><span class="a">Padilla Bravo</span><span class="b"></span></span>
+      </a>
     </div>
   </div>
 </header>
@@ -395,9 +424,9 @@ aside.lateral .chips.dirs button.chip[data-v="Retroceso"][aria-pressed="true"]{
       <div class="bloque"><span class="rot">Estado del hecho</span><div class="chips" id="fEstado"></div></div>
       <p class="activos" id="activos"></p>
       <button class="lim" id="btnLimpiar">Limpiar filtros</button>
-      <p class="activos">Todo gráfico es también un filtro: haz clic en una barra, en un
-      segmento o en una celda. Lo que elijas se refleja en los indicadores, en los demás
-      gráficos y en la tabla del final.</p>
+      <p class="activos">Las barras, la dona y la matriz son también filtros: haz clic en
+      una barra, en un segmento o en una celda. Lo que elijas se refleja en los indicadores, en
+      los demás gráficos y en la tabla del final.</p>
     </aside>
 
     <main>
@@ -407,28 +436,20 @@ aside.lateral .chips.dirs button.chip[data-v="Retroceso"][aria-pressed="true"]{
         <div class="cuerpo">
           <p>Cada noticia trae una columna propia, <b>Tipo de hecho</b>, que dice qué clase de hecho
           es con independencia del tema del que hable. El indicador cuenta las que están marcadas
-          como Lanzamiento.</p>
+          como Lanzamiento y ya ocurrieron, es decir, las de estado Consumado.</p>
           <p><b>Entra:</b> un cambio en lo que se puede usar. Un modelo o una versión nueva, la
           apertura de pesos, una función nueva, un cambio de precio o de los límites de una API, el
           paso de vista previa a disponibilidad general, el hardware presentado como producto, el
           robot o el vehículo autónomo que se despliega, y también lo que se retira o se cierra.</p>
           <p><b>No entra:</b> la alianza sin producto detrás ni la nota que solo comenta un
           lanzamiento ajeno. La hoja de ruta y la versión en preparación sí son del tipo
-          Lanzamiento, pero con estado En curso o Anunciado, y el indicador cuenta solo las
-          consumadas.</p>
+          Lanzamiento, pero con estado En curso o Anunciado, y por eso no suman al indicador ni
+          a los dos lanzamientos diarios que busca la pauta.</p>
           <p>Los otros diez tipos son Financiamiento e inversión, Adquisición, Acuerdo, Resultados y
           mercado, Litigio o norma, Declaración o compromiso, Estudio, Incidente, Personas y equipos
           y Opinión y análisis. Están en el panel de filtros y en la tabla del final, así que se
           puede cruzar cualquiera con cualquier tema: los litigios de agosto, las rondas en
-          robótica, los incidentes de seguridad de modelos.</p>
-          <p class="nota-cambio">El 13-09-2026 la clasificación cambió y la serie completa se
-          reclasificó hacia atrás. <b>Declaración o compromiso</b> es nuevo y recoge el hecho
-          que antes no tenía tipo: alguien se pronuncia o se obliga (una postura de gobierno, una
-          carta abierta, un compromiso voluntario). <b>Análisis</b> pasó a llamarse <b>Opinión y
-          análisis</b> y quedó restringido al comentario de un tercero. En los temas salieron
-          <b>Investigación</b> y <b>Personas y organización</b>, que repetían un tipo de hecho en
-          vez de decir de qué habla la noticia, y <b>Regulación y legal</b> pasó a
-          <b>Regulación y política</b>.</p>
+          robótica, los estudios sobre empleo.</p>
         </div>
       </details>
 
@@ -436,8 +457,7 @@ aside.lateral .chips.dirs button.chip[data-v="Retroceso"][aria-pressed="true"]{
         <div class="tarjeta">
           <h2>Últimos titulares</h2>
           <p class="bajada">Lo más reciente de la selección actual. Cambia con cualquier filtro:
-          filtra por Producto y modelos y por Robótica e IA física, y queda la lista de
-          lanzamientos.</p>
+          elige Lanzamiento en Tipo de hecho y queda la lista de lanzamientos.</p>
           <h3 id="subLanz"></h3>
           <ul class="lista-lanz" id="lanzamientos"></ul>
         </div>
@@ -506,7 +526,7 @@ aside.lateral .chips.dirs button.chip[data-v="Retroceso"][aria-pressed="true"]{
         <div class="tarjeta ancho">
           <h2>Acumulado por dirección</h2>
           <p class="bajada">Suma corrida de avances, neutros y retrocesos desde el inicio del
-          periodo. El signo se mide contra el protagonista de cada noticia, igual que en la dona.</p>
+          periodo. La categoría se mide contra el protagonista de cada noticia, igual que en la dona.</p>
           <div class="granul" id="granulDir">
             <span class="rot">Escala</span>
             <button class="per" data-gran="dia" aria-pressed="true">Día</button>
@@ -608,6 +628,12 @@ function glosario(items, defs){
   return presentes.map(n => defs[n]).join("; ") + ". ";
 }
 const glosarioActores = items => glosario(items, DEF_ACTOR);
+/* Con qué parte toda nota de un gráfico de barras horizontales. Recibe lo que devuelve
+   barrasH: si alguna cifra no cupo en su barra, la nota lo dice. */
+const notaBarras = hayFuera => "<b>Nota.</b> Dentro de cada barra va el número de noticias y a "+
+  "su derecha el porcentaje sobre el total del periodo. "+
+  (hayFuera ? "En las barras más cortas el número no cabe y va fuera, seguido del porcentaje. "
+            : "");
 const COLOR_DIR = {Avance:"var(--favorable)", Neutro:"var(--s4)", Retroceso:"var(--adverso)"};
 const SERIES = ["var(--s1)","var(--s2)","var(--s3)","var(--s4)"];
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g,
@@ -617,6 +643,9 @@ const diaMes = iso => iso ? iso.slice(8,10)+"-"+iso.slice(5,7) : "";
 const larga = iso => iso ? Number(iso.slice(8,10))+" de "+MESES[Number(iso.slice(5,7))-1]+
                            " de "+iso.slice(0,4) : "";
 const pct = (n, t) => t ? Math.round(n/t*100) : 0;
+/* Porcentaje para rotular un gráfico: con espacio fino antes del signo, y sin dejar en
+   cero lo que existe pero no llega al 1 %. Devuelve HTML: el menor que va escapado. */
+const cuota = (n, t) => { const p = pct(n, t); return (n && !p ? "&lt;1" : p) + "\u202f%"; };
 function suma(lista, campo){
   const m = new Map();
   for (const d of lista){ const k = d[campo]; if (!k) continue; m.set(k, (m.get(k)||0)+1); }
@@ -637,9 +666,6 @@ const F = {desde:PRIMERA, hasta:ULTIMA, texto:"",
            pai:new Set(), med:new Set(), act:new Set()};
 const CAMPOS = {tem:"Tema", tip:"Tipo de hecho", dir:"Dirección", est:"Estado",
                 pai:"País", med:"Medio", act:"Actor"};
-/* Desde esta fecha el prompt de la tarea busca dos lanzamientos de cinco:
-   la composición por tema deja de ser comparable con la de antes. */
-const CAMBIO_CUOTA = "2026-08-29";
 /* Series de la tendencia: fuera de la paleta de identidad, elegidas por contraste
    entre ellas y contra las dos superficies. */
 const LINEAS_CLARO  = ["#0B6E99","#D4560A","#7A3FA8","#0F7C5A",
@@ -683,10 +709,13 @@ function barrasH(cont, items, op){
   // debe quedarse con el resalte por ser la suma de muchas.
   const cima = Math.max(...items.filter(i => !(i[2] && (i[2].agregado || i[2].residual)))
                                .map(i => i[1]));
-  const util = o.ancho - o.rotulo - 36;
+  // El porcentaje de cada barra se calcula sobre el total dibujado y va a su derecha.
+  const total = items.reduce((a, i) => a + i[1], 0);
+  const util = o.ancho - o.rotulo - 46;
   const h = items.length * o.alto + 6;
   const sel = o.campo ? F[o.campo] : null;
   let s = '<svg viewBox="0 0 '+o.ancho+' '+h+'" role="img">';
+  let hayFuera = false;
   items.forEach((it, k) => {
     const y = k*o.alto, w = Math.max(3, it[1]/max*util);
     // Un ítem agregado ("otros N") no es una entidad: no filtra y va en gris.
@@ -702,20 +731,31 @@ function barrasH(cont, items, op){
          (o.campo && !agreg
           ? ' data-campo="'+o.campo+'" data-valor="'+esc(it[0])+'"' : '')+
          ' opacity="'+(activo ? 1 : .32)+'">';
-    s += '<title>'+esc(it[0])+': '+it[1]+(it[1] === 1 ? ' noticia' : ' noticias')+'</title>';
+    s += '<title>'+esc(it[0])+': '+it[1]+(it[1] === 1 ? ' noticia' : ' noticias')+
+         ' ('+cuota(it[1], total)+')</title>';
     s += '<rect class="pista" x="0" y="'+y+'" width="'+o.ancho+'" height="'+o.alto+
          '" rx="4"></rect>';
     s += '<text class="eti" x="0" y="'+(y+15)+'"'+
          (sobra ? ' fill="var(--gris)" font-style="italic"' : '')+'>'+esc(it[0])+'</text>';
     s += '<rect class="vara" x="'+o.rotulo+'" y="'+(y+4)+'" width="'+w+'" height="'+alto+
          '" rx="'+(alto/2)+'" ry="'+(alto/2)+'" fill="'+color+'"></rect>';
-    // La cifra mayor va en naranja de señal; la barra mantiene su color.
-    s += '<text class="val'+(!sobra && it[1] === cima ? ' cima' : '')+
-         '" x="'+(o.rotulo+w+8)+'" y="'+(y+15)+'"'+
-         (sobra ? ' fill="var(--gris)"' : '')+'>'+it[1]+'</text></g>';
+    // La cifra va dentro de la barra, contra su extremo derecho, y el porcentaje fuera.
+    // Si la barra es más corta que la cifra, la cifra sale y el porcentaje la sigue.
+    // La mayor va en naranja de señal en los dos números; la barra mantiene su color.
+    const esCima = !sobra && it[1] === cima ? ' cima' : '';
+    const anchoCifra = String(it[1]).length * 7;
+    const cabe = w >= anchoCifra + 12;
+    if (!cabe) hayFuera = true;
+    s += cabe
+      ? '<text class="val dentro'+esCima+'" x="'+(o.rotulo+w-7)+'" y="'+(y+15)+
+        '" text-anchor="end">'+it[1]+'</text>'
+      : '<text class="val'+esCima+'" x="'+(o.rotulo+w+7)+'" y="'+(y+15)+'">'+it[1]+'</text>';
+    s += '<text class="val'+esCima+'" x="'+(o.rotulo+w+(cabe ? 8 : anchoCifra+15))+
+         '" y="'+(y+15)+'">'+cuota(it[1], total)+'</text></g>';
   });
   el.innerHTML = s + "</svg>";
   if (o.campo) conectaClics(el);
+  return hayFuera;
 }
 
 function dona(cont, items, campo){
@@ -765,7 +805,7 @@ function dona(cont, items, campo){
 
 function lineas(cont, ejeX, series, op){
   const o = Object.assign({ancho:1120, alto:230, etiquetaX:diaMes, puntos:false,
-                           marcador:null, formato:v => v}, op||{});
+                           marcador:null, cuota:false, formato:v => v}, op||{});
   const el = $(cont);
   if (!ejeX.length || !series.length){
     el.innerHTML = '<p class="vacio">Sin datos en el periodo.</p>'; return; }
@@ -811,7 +851,9 @@ function lineas(cont, ejeX, series, op){
   /* guía que sigue al cursor y proyecta el valor de cada serie en ese punto */
   const svg = el.querySelector("svg"), guia = el.querySelector(".guia");
   const dibujaGuia = i => {
-    const anchoCaja = 176, altoCaja = 20 + 16*series.length;
+    // Con cuota, junto a cada cifra va su porcentaje sobre el total de ese punto.
+    const anchoCaja = o.cuota ? 218 : 176, altoCaja = 20 + 16*series.length;
+    const totalI = series.reduce((a, se) => a + se.datos[i], 0);
     const izqCaja = x(i) > W/2;
     const cx = izqCaja ? x(i) - anchoCaja - 10 : x(i) + 10;
     let g = '<line x1="'+x(i)+'" y1="'+arr+'" x2="'+x(i)+'" y2="'+(H-aba)+'"></line>';
@@ -829,7 +871,8 @@ function lineas(cont, ejeX, series, op){
       g += '<text x="'+(cx+23)+'" y="'+yy+'" fill="var(--texto)">'+
            esc(se.nombre.length > 17 ? se.nombre.slice(0,16)+"…" : se.nombre)+'</text>';
       g += '<text x="'+(cx+anchoCaja-9)+'" y="'+yy+'" text-anchor="end" fill="var(--texto)">'+
-           o.formato(se.datos[i])+'</text>';
+           o.formato(se.datos[i])+
+           (o.cuota ? '; '+cuota(se.datos[i], totalI) : '')+'</text>';
     });
     guia.innerHTML = g;
   };
@@ -1029,19 +1072,23 @@ function render(opciones){
         (a[1] === cimaAct ? ' cima' : '')+
         (selAct.size && !selAct.has(a[0]) ? ' apagado' : '')+
         '" data-campo="act" data-valor="'+esc(a[0])+'"><span>'+esc(a[0])+
-        '</span><span class="v">'+a[1]+'</span></li>').join("") +
+        '</span><span class="v">'+a[1]+'</span><span class="p">'+
+        cuota(a[1], baseRank.length)+'</span></li>').join("") +
       (nOtros
         ? '<li class="otros'+(selAct.size ? ' apagado' : '')+'"><span>Otros '+nOtros+
-          ' actores</span><span class="v">'+restoAct+'</span></li>'
+          ' actores</span><span class="v">'+restoAct+'</span><span class="p">'+
+          cuota(restoAct, baseRank.length)+'</span></li>'
         : "")
     : '<p class="vacio">Sin datos en el periodo.</p>';
   conectaClics($("#rankActores"));
   $("#nRank").innerHTML = ra.length
-    ? "<b>Nota.</b> Los diez primeros suman "+enLista+" de "+baseRank.length+" noticias ("+
-      pct(enLista, baseRank.length)+" %); las "+restoAct+" restantes se reparten entre "+nOtros+
-      " actores con pocas apariciones cada uno, así que la columna cierra en el total del "+
-      "periodo. "+glosarioActores(ra)+
-      "Haz clic en un actor para filtrar el tablero y la tabla; la fila de otros no filtra."
+    ? "<b>Nota.</b> Junto a cada actor van el número de noticias y su porcentaje sobre "+
+      "el total del periodo. "+
+      (nOtros ? "La fila de otros reúne a los actores con pocas apariciones, así que la "+
+                "columna cierra en el total del periodo. " : "")+
+      glosarioActores(ra)+
+      "Haz clic en un actor para filtrar el tablero y la tabla."+
+      (nOtros ? " La fila de otros no filtra." : "")
     : "";
 
   /* acumulado por tema, a la escala elegida */
@@ -1054,64 +1101,53 @@ function render(opciones){
     baseTend.filter(x => x.tem === tema && x.rep <= g.fin).length);
   lineas("#gTendencia", grupos.map(g => g.etq),
     temasOrden.map((t,k) => ({nombre:t, datos:acumulado(t), color:paleta[k % paleta.length]})),
-    {alto:300, etiquetaX: e => e, formato: v => v,
-     marcador: (dias[0] <= CAMBIO_CUOTA && dias[dias.length-1] >= CAMBIO_CUOTA)
-       ? {fecha:(grupos.find(g => g.fin >= CAMBIO_CUOTA) || {}).etq} : null});
-  const totalTend = baseTend.length;
-  const lider = temasOrden[0] || "—";
-  const nLider = baseTend.filter(x => x.tem === lider).length;
+    {alto:300, etiquetaX: e => e, cuota:true, formato: v => v});
   const escala = {dia:"por día", semana:"por semana", mes:"por mes", anio:"por año"}[GRAN];
   $("#nTendencia").innerHTML = "<b>Nota.</b> Cada línea suma las noticias de un tema desde el "+
     "inicio del periodo, con corte "+escala+", así que solo puede subir o quedarse plana: lo que "+
-    "informa es la pendiente. Un tramo horizontal significa que ese tema no apareció, y dos "+
-    "líneas que se separan indican que uno crece más rápido que el otro. "+esc(lider)+" encabeza "+
-    "con "+nLider+" de "+totalTend+" noticias. Los filtros de tema no afectan este gráfico, para "+
-    "que la comparación entre temas siga siendo posible. <b>Atención a la línea vertical "+
-    "punteada:</b> desde el "+corta(CAMBIO_CUOTA)+" la tarea busca dos lanzamientos entre las "+
-    "cinco noticias del día y completa con otros temas cuando no los hay, así que a partir de ahí "+
-    "la pendiente de Producto y modelos refleja en parte esa regla.";
+    "informa es la pendiente. Al pasar el cursor por el gráfico aparecen dos datos por tema: "+
+    "el número de noticias acumuladas hasta esa fecha y, tras el punto y coma, el porcentaje "+
+    "que representa sobre el total acumulado a esa misma fecha. Los filtros de tema no afectan "+
+    "este gráfico, para "+
+    "que la comparación entre temas siga siendo posible. <b>Advertencias de lectura.</b> "+
+    "El gráfico tiene un sesgo de selección: la pauta busca que dos de las cinco noticias de "+
+    "cada día sean lanzamientos y completa con otros temas cuando no los hay, lo que ocurre "+
+    "sobre todo en fines de semana y feriados. Parte de la pendiente de Producto y modelos se "+
+    "debe a esa regla. Además, cada día entran como máximo cinco noticias, elegidas con "+
+    "criterio editorial entre las más relevantes. Las líneas muestran cómo se reparte esa "+
+    "selección entre los temas y no cuánto se publica sobre inteligencia artificial cada día.";
 
   /* dona de dirección */
   const baseDir = filtra("dir");
   const itemsDir = DIRS.map(k => [k, baseDir.filter(x => x.dir === k).length]).filter(i => i[1]);
   dona("#gDireccion", itemsDir, "dir");
-  const tDir = itemsDir.reduce((a,b) => a+b[1], 0);
   const av = (itemsDir.find(i => i[0] === "Avance") || ["",0])[1];
   const re = (itemsDir.find(i => i[0] === "Retroceso") || ["",0])[1];
   $("#nDireccion").innerHTML = "<b>Nota.</b> Se mide contra el protagonista de la noticia y no "+
     "contra la industria: una multa a una empresa es retroceso para ella aunque al sector le sea "+
     "indiferente. Cuando el protagonista son Trabajadores, Usuarios o Sociedad, un retroceso "+
-    "significa daño a personas y no a una empresa. En el periodo hay "+pct(av,tDir)+" % de "+
-    "avances frente a "+pct(re,tDir)+" % de retrocesos"+
-    (av > re*1.5 ? "; buena parte de esos avances son empresas anunciando cosas sobre sí mismas, "+
-      "así que la cifra habla tanto de la cobertura como de los hechos" : "")+
-    ". Haz clic en un segmento para filtrar.";
+    "significa daño a personas y no a una empresa."+
+    (av > re*1.5 ? " Buena parte de los avances son empresas anunciando cosas sobre sí mismas, "+
+      "así que la proporción habla tanto de la cobertura como de los hechos." : "")+
+    " Haz clic en un segmento para filtrar.";
 
   const baseTema = filtra("tem");
   const itemsTema = suma(baseTema,"tem");
-  barrasH("#gTema", itemsTema, {campo:"tem", ancho:520, rotulo:175});
-  const tt = itemsTema.reduce((a,b) => a+b[1], 0);
-  const tres = itemsTema.slice(0,3).reduce((a,b) => a+b[1], 0);
+  const fueraTema = barrasH("#gTema", itemsTema, {campo:"tem", ancho:520, rotulo:175});
   $("#nTema").innerHTML = itemsTema.length
-    ? "<b>Nota.</b> " + esc(itemsTema[0][0]) + " encabeza con " + itemsTema[0][1] + " noticias (" +
-      pct(itemsTema[0][1], tt) + " %) y los tres primeros temas concentran " + pct(tres, tt) +
-      " % del total. Haz clic en una barra para filtrar por ese tema. Desde el " +
-      corta(CAMBIO_CUOTA) + " la tarea apunta a dos lanzamientos diarios y completa con otros " +
-      "temas cuando no los hay, así que en periodos posteriores el peso de Producto y modelos " +
-      "marca un piso buscado, no cuánto se lanzó."
+    ? notaBarras(fueraTema) + "Haz clic en una barra para filtrar por ese tema. La pauta busca que " +
+      "dos de las cinco noticias de cada día sean lanzamientos, así que el peso de Producto y " +
+      "modelos refleja en parte esa preferencia y no cuánto se lanzó."
     : "";
 
   /* cruce tema × dirección */
   const baseTipo = filtra("tip");
   const itemsTipo = suma(baseTipo,"tip");
-  barrasH("#gTipo", itemsTipo, {campo:"tip", ancho:520, rotulo:175});
-  const ttip = itemsTipo.reduce((a,b) => a+b[1], 0);
+  const fueraTipo = barrasH("#gTipo", itemsTipo, {campo:"tip", ancho:520, rotulo:175});
   $("#nTipo").innerHTML = itemsTipo.length
-    ? "<b>Nota.</b> Es la segunda dimensión de la clasificación, incorporada el 11-09-2026 y "+
-      "aplicada a toda la serie: el tema dice de qué habla la noticia y el tipo dice qué clase de "+
-      "hecho es, así que se pueden cruzar. " + esc(itemsTipo[0][0]) + " encabeza con " +
-      itemsTipo[0][1] + " noticias (" + pct(itemsTipo[0][1], ttip) + " %). Haz clic en una barra "+
-      "para filtrar."
+    ? notaBarras(fueraTipo) + "Es la segunda dimensión de la clasificación: el tema dice de qué habla la "+
+      "noticia y el tipo dice qué clase de hecho es, así que se pueden cruzar. Haz clic en "+
+      "una barra para filtrar."
     : "";
 
   const baseCru = filtra("tem") .filter(x => !F.dir.size || true);
@@ -1122,15 +1158,8 @@ function render(opciones){
     x.tem === t && x.dir === c).length;
   const filasCru = suma(enRango(),"tem").map(t => t[0]);
   matriz("#gCruce", filasCru, DIRS, cuenta);
-  let peor = ["", -1];
-  filasCru.forEach(t => { const v = cuenta(t,"Retroceso"); if (v > peor[1]) peor = [t, v]; });
-  let mejor = ["", -1];
-  filasCru.forEach(t => { const v = cuenta(t,"Avance"); if (v > mejor[1]) mejor = [t, v]; });
   $("#nCruce").innerHTML = "<b>Nota.</b> Cada celda cuenta noticias del periodo; el tono acompaña "+
-    "al número, no lo reemplaza. Los avances se concentran en "+esc(mejor[0])+" ("+mejor[1]+
-    ") y los retrocesos en "+esc(peor[0])+" ("+peor[1]+"). Un tema con muchos retrocesos y pocos "+
-    "avances suele señalar un problema abierto, no un mal mes. Haz clic en una celda para ver "+
-    "esas noticias.";
+    "al número, no lo reemplaza. Haz clic en una celda para ver esas noticias.";
 
   /* acumulado por dirección, a su propia escala */
   const gruposDir = agrupa(dias, GRAN_DIR);
@@ -1140,20 +1169,20 @@ function render(opciones){
   lineas("#gBalance", gruposDir.map(g => g.etq),
     DIRS.map(k => ({nombre:k === "Avance" ? "Avances" : k === "Neutro" ? "Neutras" : "Retrocesos",
                     datos:acumDir(k), color:COLOR_DIR[k]})),
-    {alto:280, etiquetaX: e => e, puntos: gruposDir.length <= 20, formato: v => v});
-  const finAv = (acumDir("Avance").slice(-1)[0]) || 0;
-  const finNe = (acumDir("Neutro").slice(-1)[0]) || 0;
-  const finRe = (acumDir("Retroceso").slice(-1)[0]) || 0;
+    {alto:280, etiquetaX: e => e, puntos: gruposDir.length <= 20, cuota:true,
+     formato: v => v});
   const escalaDir = {dia:"por día", semana:"por semana", mes:"por mes",
                      anio:"por año"}[GRAN_DIR];
   $("#nBalance").innerHTML = gruposDir.length
-    ? "<b>Nota.</b> Cada línea acumula las noticias de un signo desde el inicio del periodo, con "+
+    ? "<b>Nota.</b> Cada línea acumula las noticias de una categoría desde el inicio del periodo, con "+
       "corte "+escalaDir+", así que lo que informa es la pendiente y la distancia entre líneas. "+
       "Avance y retroceso se miden contra el protagonista de cada noticia y no contra la industria "+
       "de la IA: una empresa que pierde un juicio suma un retroceso aunque al sector le sea "+
       "indiferente, y cuando el protagonista son Trabajadores, Usuarios o Sociedad, el retroceso "+
-      "es daño a personas. Al cierre del periodo van "+finAv+" avances, "+finNe+" neutras y "+
-      finRe+" retrocesos: la brecha entre la línea verde y la roja se ensancha cuando la cobertura "+
+      "es daño a personas. Al pasar el cursor por el gráfico aparecen dos datos por categoría: el "+
+      "número de noticias acumuladas hasta esa fecha y, tras el punto y coma, el porcentaje que "+
+      "representa sobre el total acumulado a esa misma fecha. La brecha entre la línea verde y "+
+      "la roja se ensancha cuando la cobertura "+
       "se vuelve más favorable a sus protagonistas, y se estrecha cuando pasa lo contrario."
     : "";
 
@@ -1163,11 +1192,9 @@ function render(opciones){
   // otros medios, y no compite por orden con los países con nombre.
   const dibujoPais = itemsPais.filter(i => i[0] !== "Otro")
     .concat(itemsPais.filter(i => i[0] === "Otro").map(i => [i[0], i[1], {residual:true}]));
-  barrasH("#gPais", dibujoPais, {campo:"pai", rotulo:100});
-  const tp = itemsPais.reduce((a,b) => a+b[1], 0);
+  const fueraPais = barrasH("#gPais", dibujoPais, {campo:"pai", rotulo:100});
   $("#nPais").innerHTML = itemsPais.length
-    ? "<b>Nota.</b> "+esc(itemsPais[0][0])+" concentra "+pct(itemsPais[0][1], tp)+" % del periodo. "+
-      "El país es dónde ocurre el hecho, no la nacionalidad de la empresa: una demanda contra "+
+    ? notaBarras(fueraPais) + "El país es dónde ocurre el hecho, no la nacionalidad de la empresa: una demanda contra "+
       "Meta en Londres cuenta como Reino Unido. "+glosario(itemsPais, DEF_PAIS)+
       "Haz clic en una barra para filtrar."
     : "";
@@ -1181,19 +1208,18 @@ function render(opciones){
   const dibujoMed = colaMed.length
     ? itemsMed.concat([["otros "+colaMed.length+" medios", nCola, {agregado:true}]])
     : itemsMed;
-  barrasH("#gMedios", dibujoMed, {campo:"med", rotulo:165});
-  const totMed = baseMed.length;
-  const nTop = Math.min(3, todosMed.length);
-  const tresMed = itemsMed.slice(0,nTop).reduce((a,b) => a+b[1], 0);
-  const cabeza = nTop === 1 ? "El único medio citado aporta "
-                            : "Los "+(nTop === 2 ? "dos" : "tres")+" medios más citados aportan ";
+  const fueraMed = barrasH("#gMedios", dibujoMed, {campo:"med", rotulo:165});
   $("#nMedios").innerHTML = itemsMed.length
-    ? "<b>Nota.</b> "+cabeza+tresMed+" de "+totMed+" noticias ("+
-      pct(tresMed, totMed)+" %). Una concentración alta indica que el reporte está mirando por "+
-      "pocas ventanas. "+
+    ? notaBarras(fueraMed) +
+      "Una noticia entra solo si su página se puede abrir para verificar la fecha. Varios "+
+      "diarios y algunos blogs de fabricantes tienen muro de pago o bloquean la lectura "+
+      "automática, y en esos casos se cita al medio accesible que cubrió el mismo hecho. Por eso "+
+      "pesa más techcrunch.com, un medio de tecnología con cobertura diaria de inteligencia "+
+      "artificial. Además, hasta agosto de 2026 un mismo medio podía aportar más de una noticia "+
+      "al día. Desde septiembre de 2026 la pauta admite una sola noticia por medio al día. "+
       (colaMed.length
-        ? "La última barra junta los "+colaMed.length+" medios restantes ("+nCola+" noticias, "+
-          pct(nCola, totMed)+" %), así que las barras suman el total; esa barra no filtra. "
+        ? "La última barra junta los "+colaMed.length+" medios restantes, así que las barras "+
+          "suman el total; esa barra no filtra. "
         : "")+
       "Haz clic en una barra para quedarte con un medio."
     : "";
